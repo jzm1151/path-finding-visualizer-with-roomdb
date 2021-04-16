@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">pathfinding</string>
+
+    <string name="a_star">A*</string>
+    <string name="depth_first">DFS</string>
+    <string name="breath_first">BFS</string>
+    <string name="load_graph">LOAD GRAPH</string>
+    <string name="reset_graph">RESET GRAPH</string>
+    <string name="draw_barrier">Draw barrier</string>
+    <string name="erase">Erase</string>
+</resources>
