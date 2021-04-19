@@ -232,13 +232,6 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         });
     }
 
-    // Disabling the RadioButtons so they cannot be clicked while a path finding algorithm is running
-    private void disableRadioButtons() {
-        aStar.setEnabled(false);
-        breathFirst.setEnabled(false);
-        depthFirst.setEnabled(false);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         optionsMenu = menu;
@@ -284,6 +277,50 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(pathRunningKey, pathRunning);
+        outState.putInt(progressKey, progress);
+
+        //Persisting the start and goal node positions
+        outState.putIntArray(startNodePositionKey, new int[]{startNodePosition.first, startNodePosition.second});
+        outState.putIntArray(goalNodePositionKey, new int[]{goalNodePosition.first, goalNodePosition.second});
+
+        // Making the state of persistGraph matches the state of graph
+        updatePersistGraph();
+        outState.putSerializable(persistGraphKey, persistGraph);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        // Making sure that if there is a path finding algorithm running it stops
+        if (pathRunning) {
+            progress = pathThread.getCount();
+            pathThread.cancel(false);
+            Log.d("onPause", "progress:"+progress);
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+
+        // If a path finding algorithm was running before onPause() was called it is restarted here
+        if (pathRunning) {
+            if (aStar.isChecked())
+                aStar();
+            else if (breathFirst.isChecked())
+                breathFirst();
+            else
+                depthFirst();
+        }
+
+        super.onResume();
+    }
+
+    // Starts A* on a background thread
     private void aStar() {
         // Making all unnecessary nodes blank nodes
         cleanGraph();
@@ -303,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         pathThread.execute(progress);
     }
 
+    // Starts Breath First Search on a background thread
     private void breathFirst() {
         // Making all unnecessary nodes blank nodes
         cleanGraph();
@@ -322,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         pathThread.execute(progress);
     }
 
+    // Starts Depth First Search on a background thread
     private void depthFirst() {
         // Making all unnecessary nodes blank nodes
         cleanGraph();
@@ -417,26 +456,12 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         graph[goalNodePosition.first][goalNodePosition.second].setBackground(goalNode);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(pathRunningKey, pathRunning);
-        outState.putInt(progressKey, progress);
-
-        //Persisting the start and goal node positions
-        outState.putIntArray(startNodePositionKey, new int[]{startNodePosition.first, startNodePosition.second});
-        outState.putIntArray(goalNodePositionKey, new int[]{goalNodePosition.first, goalNodePosition.second});
-
-        // Making the state of persistGraph matches the state of graph
-        updatePersistGraph();
-        outState.putSerializable(persistGraphKey, persistGraph);
-
-        super.onSaveInstanceState(outState);
+    // Disabling the RadioButtons so they cannot be clicked while a path finding algorithm is running
+    private void disableRadioButtons() {
+        aStar.setEnabled(false);
+        breathFirst.setEnabled(false);
+        depthFirst.setEnabled(false);
     }
-
-    public void forTesting(View view) {
-        // nothing to test now
-    }
-
 
     // Updates the graph to the point where the path finding algorithm is. The first node is the List
     // update is always going to be turned red because by design it is the node that was just removed
@@ -623,32 +648,5 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
         pathNode.setShape(GradientDrawable.RECTANGLE);
         pathNode.setColor(Color.CYAN);
         pathNode.setStroke(2, Color.BLACK);
-    }
-
-    @Override
-    protected void onPause() {
-        // Making sure that if there is a path finding algorithm running it stops
-        if (pathRunning) {
-            progress = pathThread.getCount();
-            pathThread.cancel(false);
-            Log.d("onPause", "progress:"+progress);
-        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-
-        // If a path finding algorithm was running before onPause() was called it is restarted here
-        if (pathRunning) {
-            if (aStar.isChecked())
-                aStar();
-            else if (breathFirst.isChecked())
-                breathFirst();
-            else
-                depthFirst();
-        }
-
-        super.onResume();
     }
 }

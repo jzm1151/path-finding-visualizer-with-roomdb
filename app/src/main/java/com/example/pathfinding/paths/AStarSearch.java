@@ -1,6 +1,5 @@
 package com.example.pathfinding.paths;
 
-import android.util.Log;
 import android.util.Pair;
 
 import com.example.pathfinding.MainActivity;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+// A class that allows the A* algorithm to be run on a background thread
 public class AStarSearch extends PathFinding {
     // Expanded list and also will show which node are blocked
     private String[][] visitedList;
@@ -144,16 +144,15 @@ public class AStarSearch extends PathFinding {
 
     @Override
     protected void onProgressUpdate(List<Node>... values) {
-        Log.d("publishing progress", "publishing progress");
         listener.reportProgress(values[0]);
     }
 
     @Override
     protected void onPostExecute(Node node) {
-        Log.d("finish", "finish");
         listener.pathFound(node);
     }
 
+    @Override
     public synchronized int getCount() {
         return count;
     }

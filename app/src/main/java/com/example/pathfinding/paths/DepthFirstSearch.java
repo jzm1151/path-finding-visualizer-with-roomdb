@@ -1,14 +1,13 @@
 package com.example.pathfinding.paths;
 
-import android.util.Log;
 import android.util.Pair;
 
-import com.example.pathfinding.MainActivity;
 import com.example.pathfinding.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// A class that allows the Depth First Search algorithm to be run on a background thread
 public class DepthFirstSearch extends PathFinding {
     // Visited list and also will show which node are blocked
     private String[][] visitedList;
@@ -146,13 +145,11 @@ public class DepthFirstSearch extends PathFinding {
 
     @Override
     protected void onProgressUpdate(List<Node>... values) {
-        Log.d("publishing progress", "publishing progress");
         listener.reportProgress(values[0]);
     }
 
     @Override
     protected void onPostExecute(Node node) {
-
         listener.pathFound(node);
     }
 
