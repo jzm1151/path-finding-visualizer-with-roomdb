@@ -71,6 +71,7 @@
         android:textColor="@color/white"
         android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="@id/buttonReset"
+        app:layout_constraintBottom_toBottomOf="@id/buttonReset"
         app:layout_constraintEnd_toStartOf="@id/imageViewBarrierDrag"/>
 
     <ImageView
@@ -78,9 +79,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
+        android:contentDescription="@string/brush"
         app:srcCompat="@drawable/ic_outline_brush_24"
         app:layout_constraintTop_toTopOf="@id/textViewDrawBarrier"
-        app:layout_constraintEnd_toStartOf="@id/textViewErase"/>
+        app:layout_constraintEnd_toStartOf="@id/textViewErase" />
 
     <TextView
         android:id="@+id/textViewErase"
@@ -90,7 +92,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toTopOf="@id/buttonReset"
+        app:layout_constraintTop_toTopOf="@id/textViewDrawBarrier"
         app:layout_constraintEnd_toStartOf="@id/imageViewEraseDrag"/>
 
     <ImageView
@@ -98,6 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
+        android:contentDescription="@string/eraser"
         app:srcCompat="@drawable/ic_baseline_circle_24"
         app:layout_constraintTop_toTopOf="@id/textViewErase"
         app:layout_constraintEnd_toEndOf="parent" />

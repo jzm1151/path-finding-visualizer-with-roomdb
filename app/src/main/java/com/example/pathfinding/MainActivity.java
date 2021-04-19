@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
             table.addView(row);
         }
 
+        // Initializing the position of the start and goal node
         if (savedInstanceState == null) {
             startNodePosition = new Pair<>(0, 0);
             goalNodePosition = new Pair<>(n-1, n-1);
@@ -471,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
     @Override
     public void pathFound(Node node) {
         if (node == null) {
-            Toast.makeText(this, "Path not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.path_not_found, Toast.LENGTH_LONG).show();
         }
         else {
             Node temp = node;

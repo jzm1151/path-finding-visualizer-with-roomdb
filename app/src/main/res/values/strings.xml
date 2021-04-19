@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pathfinding</string>
+    <string name="app_name">Path finding</string>
 
     <string name="a_star">A*</string>
     <string name="depth_first">DFS</string>
@@ -8,4 +8,9 @@
     <string name="reset_graph">RESET GRAPH</string>
     <string name="draw_barrier">Draw barrier</string>
     <string name="erase">Erase</string>
+
+    <string name="eraser">Eraser</string>
+    <string name="brush">Brush</string>
+
+    <string name="path_not_found">Path not found</string>
 </resources>
