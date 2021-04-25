@@ -9,4 +9,10 @@
         android:icon="@drawable/ic_menu_run"
         android:title="menu_run"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_save"
+        android:icon="@drawable/ic_menu_save"
+        android:title="menu_save"
+        app:showAsAction="ifRoom" />
 </menu>

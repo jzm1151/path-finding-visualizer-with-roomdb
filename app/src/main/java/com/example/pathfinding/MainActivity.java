@@ -284,6 +284,9 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
             pathThread.cancel(false);
             transitionNonRunningState();
         }
+        else if (id == R.id.menu_save) {
+            Log.d("testing menu", "here");
+        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -48,6 +48,18 @@
     </RadioGroup>
 
     <Button
+        android:id="@+id/buttonLoadGraph"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/load_graph"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:onClick="resetGraph"
+        app:layout_constraintBottom_toTopOf="@id/buttonReset"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
         android:id="@+id/buttonReset"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
