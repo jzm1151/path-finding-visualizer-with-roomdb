@@ -21,6 +21,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pathfinding.db.DatabaseOfGraphs;
+import com.example.pathfinding.db.Graph;
 import com.example.pathfinding.paths.AStarSearch;
 import com.example.pathfinding.paths.BreathFirstSearch;
 import com.example.pathfinding.paths.DepthFirstSearch;
@@ -34,7 +36,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnResultPath {
     // Width and height of the graph
-    private final int n = 10;
+    public static final int n = 10;
 
     // Backgrounds for the TextViews in the graph
     private GradientDrawable blankNode;
@@ -102,6 +104,15 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //database test
+        DatabaseOfGraphs.getDatabase(getApplication());
+        DatabaseOfGraphs.getGraphByName("initial", new DatabaseOfGraphs.GraphListener() {
+            @Override
+            public void onGraphReturned(Graph graph) {
+                Log.d("database test", graph.graph.length()+"");
+            }
+        });
 
         // Initializing RadioButton instance variables
         aStar = findViewById(R.id.radioButtonAStar);
