@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -470,6 +471,12 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
         // Resetting the start and goal node
         graph[startNodePosition.first][startNodePosition.second].setBackground(startNode);
         graph[goalNodePosition.first][goalNodePosition.second].setBackground(goalNode);
+    }
+
+    // Starts a new activity so a graph can be loaded in
+    public void loadGraph(View view) {
+        Intent intent = new Intent(this, LoadActivity.class);
+        startActivity(intent);
     }
 
     // Disabling the RadioButtons so they cannot be clicked while a path finding algorithm is running

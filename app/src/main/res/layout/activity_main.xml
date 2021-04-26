@@ -54,7 +54,7 @@
         android:text="@string/load_graph"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:onClick="resetGraph"
+        android:onClick="loadGraph"
         app:layout_constraintBottom_toTopOf="@id/buttonReset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
