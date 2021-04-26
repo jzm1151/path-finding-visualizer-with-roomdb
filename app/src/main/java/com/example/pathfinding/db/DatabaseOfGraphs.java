@@ -55,6 +55,21 @@ public abstract class DatabaseOfGraphs extends RoomDatabase {
         insert(new Graph(0, "initial", firstGraph));
     }
 
+    public static String turnGraphToString(String[][] graph) {
+        String stringGraph = "";
+
+        for (int i = 0; i < MainActivity.n; i++) {
+            for (int j = 0; j < MainActivity.n; j++) {
+                if (graph[i][j].equals(MainActivity.startNodeKey)) stringGraph += "1";
+                else if (graph[i][j].equals(MainActivity.goalNodeKey)) stringGraph += "2";
+                else if (graph[i][j].equals(MainActivity.blockedNodeKey)) stringGraph += "3";
+                else stringGraph += "0";
+            }
+        }
+
+        return stringGraph;
+    }
+
     public static void getGraph(int id, GraphListener listener) {
         new AsyncTask<Integer, Void, Graph>() {
             protected Graph doInBackground(Integer... ids) {

@@ -2,6 +2,7 @@ package com.example.pathfinding;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements OnResultPath {
+public class MainActivity extends AppCompatActivity implements OnResultPath, SaveGraphDialog.SaveGraphInterface {
     // Width and height of the graph
     public static final int n = 10;
 
@@ -107,10 +108,10 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
 
         //database test
         DatabaseOfGraphs.getDatabase(getApplication());
-        DatabaseOfGraphs.getGraphByName("initial", new DatabaseOfGraphs.GraphListener() {
+        DatabaseOfGraphs.getGraphByName("line", new DatabaseOfGraphs.GraphListener() {
             @Override
             public void onGraphReturned(Graph graph) {
-                Log.d("database test", graph.graph.length()+"");
+                Log.d("database test", graph.graph);
             }
         });
 
@@ -284,8 +285,9 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
             pathThread.cancel(false);
             transitionNonRunningState();
         }
-        else if (id == R.id.menu_save) {
-            Log.d("testing menu", "here");
+        else if (id == R.id.menu_save && !pathRunning) {
+            DialogFragment dialog = new SaveGraphDialog();
+            dialog.show(getSupportFragmentManager(), "SaveGraphDialog");
         }
 
         return super.onOptionsItemSelected(item);
@@ -530,6 +532,14 @@ public class MainActivity extends AppCompatActivity implements OnResultPath {
 
         // Because the path finding process is over
         transitionNonRunningState();
+    }
+
+    // This method is called to save the current graph to the database
+    @Override
+    public void saveGraph(String graphName) {
+        // making sure the graph that is going to be saved is up to date
+        updatePersistGraph();
+        DatabaseOfGraphs.insert(new Graph(0, graphName, DatabaseOfGraphs.turnGraphToString(persistGraph)));
     }
 
     // The listener that allows the node in the graph to be drug if they are the start or goal node

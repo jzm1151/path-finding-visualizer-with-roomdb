@@ -13,4 +13,8 @@
     <string name="brush">Brush</string>
 
     <string name="path_not_found">Path not found</string>
+
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save_graph">Enter graph name</string>
 </resources>
