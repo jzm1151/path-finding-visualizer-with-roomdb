@@ -2,6 +2,7 @@ package com.example.pathfinding.db;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -122,5 +123,42 @@ public abstract class DatabaseOfGraphs extends RoomDatabase {
                 return null;
             }
         }.execute(graph);
+    }
+
+    public static Pair<Integer, Integer> getStart(String graph) {
+        int count = 0;
+
+        while (graph.charAt(count) != '1') {
+            count += 1;
+        }
+
+        return new Pair<>(count / MainActivity.n, count % MainActivity.n);
+    }
+
+    public static Pair<Integer, Integer> getGoal(String graph) {
+        int count = 0;
+
+        while (graph.charAt(count) != '2') {
+            count += 1;
+        }
+
+        return new Pair<>(count / MainActivity.n, count % MainActivity.n);
+    }
+
+    public static String[][] convertStringGraphToArray(String stringGraph) {
+        String[][] graph = new String[MainActivity.n][MainActivity.n];
+
+        for (int i = 0; i < stringGraph.length(); i++) {
+            if (stringGraph.charAt(i) == '0')
+                graph[i/MainActivity.n][i%MainActivity.n] = MainActivity.blankNodeKey;
+            else if (stringGraph.charAt(i) == '1')
+                graph[i/MainActivity.n][i%MainActivity.n] = MainActivity.startNodeKey;
+            else if (stringGraph.charAt(i) == '2')
+                graph[i/MainActivity.n][i%MainActivity.n] = MainActivity.goalNodeKey;
+            else
+                graph[i/MainActivity.n][i%MainActivity.n] = MainActivity.blockedNodeKey;
+        }
+
+        return graph;
     }
 }

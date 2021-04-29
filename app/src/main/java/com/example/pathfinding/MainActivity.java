@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
 
     private Menu optionsMenu;
 
+    public static final int mainActivityRequestCode = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,15 +109,6 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //database test
-        DatabaseOfGraphs.getDatabase(getApplication());
-        DatabaseOfGraphs.getGraphByName("line", new DatabaseOfGraphs.GraphListener() {
-            @Override
-            public void onGraphReturned(Graph graph) {
-                Log.d("database test", graph.graph);
-            }
-        });
 
         // Initializing RadioButton instance variables
         aStar = findViewById(R.id.radioButtonAStar);
@@ -454,6 +448,15 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
         }
     }
 
+    // Updates the the graph to a new graph that was just loaded in
+    private void updateGraph() {
+        for (int i = 0; i < n; i ++) {
+            for (int j = 0; j < n; j++) {
+                graph[i][j].setBackground(backgroundMap.get(persistGraph[i][j]));
+            }
+        }
+    }
+
     // This method removes everything from the graph except the start node and the goal node
     // This method is called by the reset button
     public void resetGraph(View view) {
@@ -475,8 +478,24 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
 
     // Starts a new activity so a graph can be loaded in
     public void loadGraph(View view) {
+        // Waiting until a path finding algorithm has finished to load a graph
+        if (pathRunning) return;
+
         Intent intent = new Intent(this, LoadActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, mainActivityRequestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == mainActivityRequestCode) {
+            String stringGraph = data.getStringExtra(LoadActivity.loadGraphResult);
+            startNodePosition = DatabaseOfGraphs.getStart(stringGraph);
+            goalNodePosition = DatabaseOfGraphs.getGoal(stringGraph);
+            persistGraph = DatabaseOfGraphs.convertStringGraphToArray(stringGraph);
+            updateGraph();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // Disabling the RadioButtons so they cannot be clicked while a path finding algorithm is running

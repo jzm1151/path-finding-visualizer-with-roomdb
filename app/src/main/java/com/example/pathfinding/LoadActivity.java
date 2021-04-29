@@ -1,11 +1,16 @@
 package com.example.pathfinding;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +25,9 @@ import com.example.pathfinding.db.GraphViewModel;
 
 import java.util.List;
 
-public class LoadActivity extends AppCompatActivity {
+public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.LoadGraphInterface {
     private GraphViewModel graphViewModel;
+    public static final String loadGraphResult = "LOAD_GRAPH_ACTIVITY_RESULT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,19 @@ public class LoadActivity extends AppCompatActivity {
         graphViewModel.getAll().observe(this, adapter::setGraphs);
     }
 
+    private void displayPopUp(Graph graph) {
+        LoadGraphDialog loadGraphDialog = new LoadGraphDialog();
+        loadGraphDialog.setGraphDetails(graph.graph, graph.graphName);
+        loadGraphDialog.show(getSupportFragmentManager(), "LoadGraphDialog");
+    }
+
+    @Override
+    public void sendResult(String graph) {
+        Intent result = new Intent();
+        result.putExtra(loadGraphResult, graph);
+        setResult(Activity.RESULT_OK, result);
+        finish();
+    }
 
     public class GraphListAdapter extends RecyclerView.Adapter<GraphListAdapter.GraphViewHolder> {
 
@@ -50,7 +69,14 @@ public class LoadActivity extends AppCompatActivity {
             private GraphViewHolder(View itemView) {
                 super(itemView);
                 graphName = itemView.findViewById(R.id.textViewGraphName);
-                Log.d("here", "testing graph viewhiodler");
+                graphName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (graph != null)
+                            displayPopUp(graph);
+                    }
+                });
+                Log.d("here", "testing graph viewholder");
             }
         }
 
