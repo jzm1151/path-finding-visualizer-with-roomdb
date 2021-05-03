@@ -9,33 +9,33 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
-public class LoadGraphDialog extends DialogFragment {
+public class DeleteGraphDialog extends DialogFragment {
     private String graphName;
-    private String graph;
+    private int graphID;
     private static final String graphNameKey = "GRAPH_NAME_KEY";
-    private static final String graphKey = "GRAPH_KEY";
-    private LoadGraphInterface listener;
+    private static final String graphIDKey = "GRAPH_ID_KEY";
+    private DeleteGraphInterface listener;
 
-    public interface LoadGraphInterface {
-        void sendResult(String graph);
+    public interface DeleteGraphInterface {
+        void confirmDelete(int graphID);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
+            graphID = savedInstanceState.getInt(graphIDKey);
             graphName = savedInstanceState.getString(graphNameKey);
-            graph = savedInstanceState.getString(graphKey);
         }
 
         Resources resources = getResources();
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(resources.getText(R.string.loading_graph)+" "+ graphName)
+        dialog.setTitle(resources.getText(R.string.deleting_graph)+" "+ graphName)
                 .setPositiveButton(resources.getText(R.string.confirm), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.sendResult(graph);
+                        listener.confirmDelete(graphID);
                     }
                 })
                 .setNegativeButton(resources.getText(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -49,15 +49,15 @@ public class LoadGraphDialog extends DialogFragment {
         return dialog.create();
     }
 
-    public void setGraphDetails(String graph, String graphName) {
-        this.graph = graph;
+    public void setGraphDetails(int graphID, String graphName) {
+        this.graphID = graphID;
         this.graphName = graphName;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(graphNameKey, graphName);
-        outState.putString(graphKey, graph);
+        outState.putInt(graphIDKey, graphID);
         super.onSaveInstanceState(outState);
     }
 
@@ -65,10 +65,10 @@ public class LoadGraphDialog extends DialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (LoadGraphInterface) context;
+            listener = (DeleteGraphInterface) context;
         }
         catch (ClassCastException e) {
-            throw new ClassCastException("Must implement LoadGraphInterface");
+            throw new ClassCastException("Must implement DeleteGraphInterface");
         }
     }
 }

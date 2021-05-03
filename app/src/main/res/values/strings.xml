@@ -17,4 +17,16 @@
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
     <string name="save_graph">Enter graph name</string>
+
+    <string name="menu_run">Menu run</string>
+    <string name="menu_save">Menu save</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="loading_graph">Loading graph</string>
+    <string name="confirm">CONFIRM</string>
+
+    <string name="waiting">Waiting for content...</string>
+    <string name="delete">DELETE</string>
+
+    <string name="deleting_graph">Deleting graph</string>
 </resources>

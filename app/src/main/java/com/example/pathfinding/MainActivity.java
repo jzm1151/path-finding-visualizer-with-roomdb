@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         optionsMenu = menu;
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.path_finding_activity, menu);
 
@@ -283,6 +284,10 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
         else if (id == R.id.menu_save && !pathRunning) {
             DialogFragment dialog = new SaveGraphDialog();
             dialog.show(getSupportFragmentManager(), "SaveGraphDialog");
+        }
+        else if (id == R.id.menu_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -565,6 +570,7 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
     public void saveGraph(String graphName) {
         // making sure the graph that is going to be saved is up to date
         updatePersistGraph();
+        DatabaseOfGraphs.getDatabase(getApplication());
         DatabaseOfGraphs.insert(new Graph(0, graphName, DatabaseOfGraphs.turnGraphToString(persistGraph)));
     }
 

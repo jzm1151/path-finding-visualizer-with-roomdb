@@ -15,10 +15,22 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonCancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/list_item" />
+
+   <Button
+       android:id="@+id/buttonCancel"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginBottom="10dp"
+       android:text="@string/cancel"
+       android:textStyle="bold"
+       android:onClick="cancelLoad"
+       app:layout_constraintEnd_toEndOf="@id/listGraphs"
+       app:layout_constraintStart_toStartOf="@id/listGraphs"
+       app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

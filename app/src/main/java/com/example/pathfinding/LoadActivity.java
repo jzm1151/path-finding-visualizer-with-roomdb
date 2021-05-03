@@ -17,15 +17,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.pathfinding.db.DatabaseOfGraphs;
 import com.example.pathfinding.db.Graph;
 import com.example.pathfinding.db.GraphViewModel;
 
 import java.util.List;
 
-public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.LoadGraphInterface {
+public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.LoadGraphInterface, DeleteGraphDialog.DeleteGraphInterface {
     private GraphViewModel graphViewModel;
     public static final String loadGraphResult = "LOAD_GRAPH_ACTIVITY_RESULT";
 
@@ -44,10 +46,16 @@ public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.L
         graphViewModel.getAll().observe(this, adapter::setGraphs);
     }
 
-    private void displayPopUp(Graph graph) {
+    private void displayPopUpForLoad(Graph graph) {
         LoadGraphDialog loadGraphDialog = new LoadGraphDialog();
         loadGraphDialog.setGraphDetails(graph.graph, graph.graphName);
         loadGraphDialog.show(getSupportFragmentManager(), "LoadGraphDialog");
+    }
+
+    private void displayPopUpForDelete(Graph graph) {
+        DeleteGraphDialog deleteGraphDialog = new DeleteGraphDialog();
+        deleteGraphDialog.setGraphDetails(graph.id, graph.graphName);
+        deleteGraphDialog.show(getSupportFragmentManager(), "DeleteGraphDialog");
     }
 
     @Override
@@ -58,14 +66,24 @@ public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.L
         finish();
     }
 
+    public void cancelLoad(View view) {
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
+
+    @Override
+    public void confirmDelete(int graphID) {
+        DatabaseOfGraphs.getDatabase(getApplication());
+        DatabaseOfGraphs.delete(graphID);
+    }
+
     public class GraphListAdapter extends RecyclerView.Adapter<GraphListAdapter.GraphViewHolder> {
 
         class GraphViewHolder extends RecyclerView.ViewHolder {
             private Graph graph;
             private TextView graphName;
+            private Button delete;
 
-            // Note that this view holder will be used for different items -
-            // The callbacks though will use the currently stored item
             private GraphViewHolder(View itemView) {
                 super(itemView);
                 graphName = itemView.findViewById(R.id.textViewGraphName);
@@ -73,15 +91,23 @@ public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.L
                     @Override
                     public void onClick(View v) {
                         if (graph != null)
-                            displayPopUp(graph);
+                            displayPopUpForLoad(graph);
                     }
                 });
-                Log.d("here", "testing graph viewholder");
+
+                delete = itemView.findViewById(R.id.buttonDelete);
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (graph != null)
+                            displayPopUpForDelete(graph);
+                    }
+                });
             }
         }
 
         private final LayoutInflater layoutInflater;
-        private List<Graph> graphs; // Cached copy of jokes
+        private List<Graph> graphs;
 
         GraphListAdapter(Context context) {
             layoutInflater = LayoutInflater.from(context);
@@ -90,7 +116,6 @@ public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.L
         @Override
         public GraphViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.list_item, parent, false);
-            Log.d("here", "testing onCreateViewHolder");
             return new GraphViewHolder(itemView);
         }
 
@@ -101,13 +126,9 @@ public class LoadActivity extends AppCompatActivity implements LoadGraphDialog.L
                 holder.graph = curr;
                 holder.graphName.setText(curr.graphName);
             }
-
-            Log.d("testing", "onBindViewHolder");
         }
 
         void setGraphs(List<Graph> graphs){
-            Log.d("testing", "testing set graphs" + graphs.size());
-
             this.graphs = graphs;
             notifyDataSetChanged();
         }
