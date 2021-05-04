@@ -6,10 +6,13 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.DragEvent;
@@ -127,6 +130,16 @@ public class MainActivity extends AppCompatActivity implements OnResultPath, Sav
         backgroundMap.put(frontierNodeKey, frontierNode);
         backgroundMap.put(visitedOrEmptyListNodeKey, visitedOrEmptyListNode);
         backgroundMap.put(pathNodeKey, pathNode);
+
+        if (savedInstanceState == null) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            Resources resources = getResources();
+            Toast.makeText(this,
+                    resources.getString(R.string.hello) + " " +
+                    sharedPreferences.getString(resources.getString(R.string.pref_username), ""),
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
 
         // Initializing progress and pathRunning and restoring the state of the RadioButtons
         if (savedInstanceState != null) {

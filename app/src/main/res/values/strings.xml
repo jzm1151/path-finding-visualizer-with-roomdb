@@ -8,6 +8,7 @@
     <string name="reset_graph">RESET GRAPH</string>
     <string name="draw_barrier">Draw barrier</string>
     <string name="erase">Erase</string>
+    <string name="hello">Hello</string>
 
     <string name="eraser">Eraser</string>
     <string name="brush">Brush</string>
@@ -29,4 +30,9 @@
     <string name="delete">DELETE</string>
 
     <string name="deleting_graph">Deleting graph</string>
+
+    <string name="pref_username">pref_username</string>
+    <string name="username">Username</string>
+    <string name="set_username">Set username</string>
+    <string name="human">human</string>
 </resources>
